@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -9,10 +8,10 @@ const (
 	TargetNumber = 2020
 )
 
-func day1() {
+func day1(puzzle int) int {
 	output := make([]int, 0)
-	readCsv("data/day1.txt", func(b []byte) error {
-		i, e := strconv.Atoi(string(b))
+	readCsv("data/day1.txt", func(b string) error {
+		i, e := strconv.Atoi(b)
 		if e != nil {
 			return e
 		}
@@ -20,8 +19,14 @@ func day1() {
 
 		return nil
 	}, logError)
-	fmt.Printf("[1:1] Product: %d\n", productOfTwo(output))
-	fmt.Printf("[1:2] Product: %d\n", productOfThree(output))
+	switch puzzle {
+	case 1:
+		return productOfTwo(output)
+	case 2:
+		return productOfThree(output)
+	default:
+		panic("invalid module")
+	}
 }
 
 func productOfTwo(nums []int) int {

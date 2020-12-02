@@ -12,7 +12,7 @@ func logError(err error) {
 }
 
 // Reads in a file from disk. The "f" parameter is a transformation function which will be executed against each line.
-func readCsv(filename string, f func([]byte) error, errFunc func(error)) {
+func readCsv(filename string, f func(string) error, errFunc func(error)) {
 	fd, e := os.Open(filename)
 	if e != nil {
 		fmt.Printf("failed to open file %s: %v\n", filename, e)
@@ -29,7 +29,7 @@ func readCsv(filename string, f func([]byte) error, errFunc func(error)) {
 			fmt.Printf("failed to read line: %v\n", e)
 			continue
 		}
-		if e = f(line); e != nil {
+		if e = f(string(line)); e != nil {
 			errFunc(e)
 		}
 	}
