@@ -6,11 +6,13 @@ import (
 )
 
 var (
-	knownAnswers = map[string]int{
+	knownAnswers = map[string]interface{}{
 		"1:1": 970816,
 		"1:2": 96047280,
 		"2:1": 572,
 		"2:2": 306,
+		"3:1": 278,
+		"3:2": 9709761600,
 	}
 )
 

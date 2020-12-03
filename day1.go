@@ -32,8 +32,8 @@ func day1(puzzle int) int {
 func productOfTwo(nums []int) int {
 	for _, i := range nums {
 		for _, j := range nums {
-			if i + j == TargetNumber {
-				return i*j
+			if i+j == TargetNumber {
+				return i * j
 			}
 		}
 	}
@@ -45,7 +45,7 @@ func productOfThree(nums []int) int {
 		for _, j := range nums {
 			for _, k := range nums {
 				if i+j+k == TargetNumber {
-					return i*j*k
+					return i * j * k
 				}
 			}
 		}
