@@ -13,11 +13,13 @@ var (
 		"2:2": 306,
 		"3:1": 278,
 		"3:2": 9709761600,
+		"4:1": 235,
+		"4:2": 194,
 	}
 )
 
 func main() {
-	days := 3
+	days := 4
 	successes := playAll(days)
 	if successes != days*2 {
 		fmt.Printf("%d scenarios tested, %d of them succeeded\n", days*2, successes)
@@ -30,7 +32,7 @@ func main() {
 func playAll(days int) int {
 	count := 0
 	for day := 1; day <= days; day++ {
-		for puzzle := 1; puzzle <=2; puzzle++ {
+		for puzzle := 1; puzzle <= 2; puzzle++ {
 			label := ""
 			a := 0
 
