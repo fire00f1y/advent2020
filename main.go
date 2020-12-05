@@ -19,7 +19,7 @@ var (
 )
 
 func main() {
-	days := 4
+	days := 5
 	successes := playAll(days)
 	if successes != days*2 {
 		fmt.Printf("%d scenarios tested, %d of them succeeded\n", days*2, successes)

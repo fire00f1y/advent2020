@@ -6,16 +6,19 @@ import (
 	"log"
 	"os"
 	"regexp"
-	"strconv"
 	"strings"
 )
 
 var (
-	colorMatch  = regexp.MustCompile(`#[0-9a-z]{6}`)
-	numberMatch = regexp.MustCompile(`^[0-9]{9}$`)
+	byrMatch         = regexp.MustCompile(`^(?:19[2-9][0-9]|200[0-2])$`)
+	iyrMatch         = regexp.MustCompile(`^(?:201[0-9]|2020)$`)
+	eyrMatch         = regexp.MustCompile(`^(202[0-9]|2030)$`)
+	colorMatch       = regexp.MustCompile(`#[0-9a-z]{6}`)
+	numberMatch      = regexp.MustCompile(`^[0-9]{9}$`)
+	dimensionMatch   = regexp.MustCompile(`^(?:1[5-8][0-9]|19[0-3])cm|(?:59|6[0-9]|7[0-6])in$`)
+	inColorSet       = regexp.MustCompile(`^amb|blu|brn|gry|grn|hzl|oth$`)
 
 	requiredFields = []string{"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid", "cid"}
-	allowedColors  = []string{"amb", "blu", "brn", "gry", "grn", "hzl", "oth"}
 )
 
 type Passport map[string]string
@@ -40,36 +43,19 @@ func isFieldValid(field string, value string) bool {
 	switch field {
 	case "byr":
 		{
-			v, _ := strconv.Atoi(value)
-			return len(value) == 4 && v >= 1920 && v <= 2002
+			return byrMatch.Match([]byte(value))
 		}
 	case "iyr":
 		{
-			v, _ := strconv.Atoi(value)
-			return len(value) == 4 && v >= 2010 && v <= 2020
+			return iyrMatch.Match([]byte(value))
 		}
 	case "eyr":
 		{
-			v, _ := strconv.Atoi(value)
-			return len(value) == 4 && v >= 2020 && v <= 2030
+			return eyrMatch.Match([]byte(value))
 		}
 	case "hgt":
 		{
-			cm := strings.HasSuffix(value, "cm")
-			inches := strings.HasSuffix(value, "in")
-			if !cm && !inches {
-				return false
-			}
-
-			if cm {
-				c, _ := strconv.Atoi(strings.Replace(value, "cm", "", -1))
-				return c >= 150 && c <= 193
-			}
-			if inches {
-				c, _ := strconv.Atoi(strings.Replace(value, "in", "", -1))
-				return c >= 59 && c <= 76
-			}
-
+			return dimensionMatch.Match([]byte(value))
 		}
 	case "hcl":
 		{
@@ -77,14 +63,7 @@ func isFieldValid(field string, value string) bool {
 		}
 	case "ecl":
 		{
-			count := 0
-			for _, color := range allowedColors {
-				if strings.TrimSpace(value) == strings.TrimSpace(color) {
-					count++
-				}
-			}
-
-			return count == 1
+			return inColorSet.Match([]byte(value))
 		}
 	case "pid":
 		{
