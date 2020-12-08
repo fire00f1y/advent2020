@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -13,13 +12,29 @@ type BootCode struct {
 	acc          int
 }
 
-func (bc *BootCode) Step() (int, bool) {
+func (bc *BootCode) Reset() {
+	bc.acc = 0
+	bc.visited = make(map[int]struct{}, 0)
+	bc.iter = 0
+}
+
+func (bc *BootCode) Step(modIndex int) (int, bool, bool) {
 	if _, visited := bc.visited[bc.iter]; visited {
-		return bc.acc, true
+		return bc.acc, true, false
+	}
+	if bc.iter >= len(bc.Instructions) {
+		return bc.acc, false, true
 	}
 	bc.visited[bc.iter] = struct{}{}
 
 	instr := bc.Instructions[bc.iter]
+	if bc.iter == modIndex {
+		if instr.Op == "nop" {
+			instr.Op = "jmp"
+		} else if instr.Op == "jmp" {
+			instr.Op = "nop"
+		}
+	}
 
 	switch instr.Op {
 	case "nop":
@@ -42,7 +57,7 @@ func (bc *BootCode) Step() (int, bool) {
 		panic("invalid instruction: " + bc.Instructions[bc.iter].Op)
 	}
 
-	return bc.acc, false
+	return bc.acc, false, false
 }
 
 func (bc *BootCode) AddInstruction(instruction Instruction) {
@@ -79,14 +94,25 @@ func day8(puzzle int) int {
 	switch puzzle {
 	case 1:
 		for {
-			value, repeated := bootCode.Step()
+			value, repeated, _ := bootCode.Step(-1)
 			if repeated {
 				return value
 			}
-			fmt.Printf("stage %d: %d\n", bootCode.iter, value)
 		}
 		return -1
 	case 2:
+		for i := 0; i < len(bootCode.Instructions); i++ {
+			for {
+				value, repeated, finished := bootCode.Step(i)
+				if finished {
+					return value
+				}
+				if repeated {
+					bootCode.Reset()
+					break
+				}
+			}
+		}
 		return -1
 	default:
 		panic("unknown puzzle number")
