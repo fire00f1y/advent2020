@@ -21,11 +21,13 @@ var (
 		"6:2": 3464,
 		"7:1": 155,
 		"7:2": 54803,
+		"8:1": nil,
+		"8:2": nil,
 	}
 )
 
 func main() {
-	days := 7
+	days := 8
 	successes := playAll(days)
 	if successes != days*2 {
 		fmt.Printf("%d scenarios tested, %d of them succeeded\n", days*2, successes)
