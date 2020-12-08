@@ -12,6 +12,15 @@ func logError(err error) {
 	fmt.Printf("error during processing: %v\n", err)
 }
 
+func StringInSlice(st string, sl []string) bool {
+	for _, s := range sl {
+		if s == st {
+			return true
+		}
+	}
+	return false
+}
+
 // Reads in a file from disk. The "f" parameter is a transformation function which will be executed against each line.
 func readCsv(filename string, f func(string) error, errFunc func(error)) {
 	fd, e := os.Open(filename)
