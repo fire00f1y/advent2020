@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"strings"
 )
@@ -18,6 +19,7 @@ func StringInSlice(st string, sl []string) bool {
 			return true
 		}
 	}
+	log.Printf("lol\n")
 	return false
 }
 
